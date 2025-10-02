@@ -1,4 +1,5 @@
 //=======================================================================================================================
+// Espera hasta que el texto indicado aparece en pantalla (por defecot dentro de un div)
 // v1.0
 //=======================================================================================================================
 async function waitForTextToAppear(text, elementType = 'div') {
@@ -16,6 +17,7 @@ async function waitForTextToAppear(text, elementType = 'div') {
 }
 
 //=======================================================================================================================
+// Espera hasta que el texto indicado DESAPAREZCA de la pantalla (por defecot dentro de un div)
 // v1.0
 //=======================================================================================================================
 async function waitForTextToDisappear(text, elementType = 'div') {
@@ -33,6 +35,7 @@ async function waitForTextToDisappear(text, elementType = 'div') {
 }
 
 //=======================================================================================================================
+// Simple delay en milisegundos
 // v1.0
 //=======================================================================================================================
 async function delay(ms) {
@@ -40,6 +43,7 @@ async function delay(ms) {
 }
 
 //=======================================================================================================================
+// Pulsa sobre el botón de Guardar
 // v1.0
 //=======================================================================================================================
 function clickSaveButton() {
@@ -56,9 +60,10 @@ function clickSaveButton() {
 }
 
 //=======================================================================================================================
+// Procesa un elemento (POI) que le llega por parámetro
 // v1.0
 //=======================================================================================================================
-async function processRestaurant(restaurant) {
+async function processOnePlace(restaurant) {
   console.log('Processing restaurant:', restaurant);
 
   const button = restaurant.parentElement.parentElement.previousSibling;
@@ -83,14 +88,14 @@ async function processRestaurant(restaurant) {
     return;
   }
 
-  console.log('Found restaurant name element:', restaurantNameElement);
+  console.log('Found sitio name element:', restaurantNameElement);
 
   button.click();
   console.log('Clicked button');
   await delay(250);
 
   const restaurantName = restaurantNameElement.textContent;
-  console.log('Restaurant name:', restaurantName);
+  console.log('Nombre del sitio:', restaurantName);
 
   await waitForTextToAppear(restaurantName, 'h1');
   console.log('H1 element found');
@@ -170,9 +175,10 @@ async function processRestaurant(restaurant) {
 //=======================================================================================================================
 // v1.0
 //=======================================================================================================================
-async function processRestaurants() {
-  const restaurants = document.querySelectorAll('[aria-label="Add note"]');
-  console.log('Found restaurants:', restaurants.length);
+async function processPlaces() {
+  // const restaurants = document.querySelectorAll('[aria-label="Add note"]');
+  const restaurants = document.querySelectorAll('[aria-label="Añadir nota"]');
+  console.log('Lugares encontrados:', restaurants.length);
 
   for (const restaurant of restaurants) {
     const isBroken = Array.from(restaurant.parentElement.parentElement.previousSibling.querySelectorAll('img'))
@@ -181,12 +187,12 @@ async function processRestaurants() {
     if (isBroken) {
       continue;
     } else {
-      await processRestaurant(restaurant);
+      await processOnePlace(restaurant);
       break;
     }
   }
 
-  processRestaurants();
+  processPlaces();
 }
 
-processRestaurants();
+processPlaces();
