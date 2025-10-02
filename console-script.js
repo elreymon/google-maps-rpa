@@ -1,3 +1,6 @@
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 async function waitForTextToAppear(text, elementType = 'div') {
   return new Promise((resolve) => {
     const interval = setInterval(() => {
@@ -12,6 +15,9 @@ async function waitForTextToAppear(text, elementType = 'div') {
   });
 }
 
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 async function waitForTextToDisappear(text, elementType = 'div') {
   return new Promise((resolve) => {
     const interval = setInterval(() => {
@@ -26,10 +32,16 @@ async function waitForTextToDisappear(text, elementType = 'div') {
   });
 }
 
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 async function delay(ms) {
   await new Promise(resolve => setTimeout(resolve, ms));
 }
 
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 function clickSaveButton() {
   const saveButton = document.querySelector('[data-value*="Save"]');
   if (!saveButton) {
@@ -43,6 +55,9 @@ function clickSaveButton() {
   console.log('Clicked save button');
 }
 
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 async function processRestaurant(restaurant) {
   console.log('Processing restaurant:', restaurant);
 
@@ -152,6 +167,9 @@ async function processRestaurant(restaurant) {
   await delay(250);
 }
 
+//=======================================================================================================================
+// v1.0
+//=======================================================================================================================
 async function processRestaurants() {
   const restaurants = document.querySelectorAll('[aria-label="Add note"]');
   console.log('Found restaurants:', restaurants.length);
