@@ -1,4 +1,10 @@
 //=======================================================================================================================
+// console-script.js
+//
+// v1.0
+//=======================================================================================================================
+
+//=======================================================================================================================
 // Espera hasta que el texto indicado aparece en pantalla (por defecot dentro de un div)
 // v1.0
 //=======================================================================================================================
@@ -63,10 +69,10 @@ function clickSaveButton() {
 // Procesa un elemento (POI) que le llega por parámetro
 // v1.0
 //=======================================================================================================================
-async function processOnePlace(restaurant) {
-  console.log('Processing restaurant:', restaurant);
+async function processOnePlace(place) {
+  console.log('Processing place:', place);
 
-  const button = restaurant.parentElement.parentElement.previousSibling;
+  const button = place.parentElement.parentElement.previousSibling;
   if (!button) {
     console.log('Button not found');
     return;
@@ -74,7 +80,7 @@ async function processOnePlace(restaurant) {
 
   console.log('Found button:', button);
 
-  const categorySpan = button.querySelector('.fontBodyMedium > div:last-child > div:last-child span:last-child');
+  const categorySpan = button.querySelector('.fontBodyMedium > div:last-child > div:last-child span:last-child');   // CLAVE
   if (!categorySpan) {
     console.log('Category span not found');
     return;
@@ -82,22 +88,22 @@ async function processOnePlace(restaurant) {
 
   console.log('Found category span:', categorySpan);
 
-  const restaurantNameElement = button.querySelector('.fontHeadlineSmall');
-  if (!restaurantNameElement) {
-    console.log('Restaurant name element not found');
+  const placeNameElement = button.querySelector('.fontHeadlineSmall');
+  if (!placeNameElement) {
+    console.log('Place name element not found');
     return;
   }
 
-  console.log('Found sitio name element:', restaurantNameElement);
+  console.log('Found sitio name element:', placeNameElement);
 
   button.click();
   console.log('Clicked button');
   await delay(250);
 
-  const restaurantName = restaurantNameElement.textContent;
-  console.log('Nombre del sitio:', restaurantName);
+  const placeName = placeNameElement.textContent;
+  console.log('Nombre del sitio:', placeName);
 
-  await waitForTextToAppear(restaurantName, 'h1');
+  await waitForTextToAppear(placeName, 'h1');
   console.log('H1 element found');
   await delay(250);
 
@@ -159,7 +165,7 @@ async function processOnePlace(restaurant) {
     console.log('Found target element:', targetElement);
 
     targetElement.parentElement.click();
-    console.log(`Clicked ${targetCategory}`);
+    console.log(`Clicked ${targetCategory}`);  // OJO es ` no '
     await delay(250);
 
     await waitForTextToAppear('Saving…');
@@ -173,24 +179,30 @@ async function processOnePlace(restaurant) {
 }
 
 //=======================================================================================================================
+// Actúa, por ejemplo sobre: https://www.google.com/maps/@40.8172061,-51.0604378,4z/data=!4m6!1m2!10m1!1e1!11m2!2sg0aA0LC8-ib4cIPcj3amUorBIS3sKA!3e3?hl=es&entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D
 // v1.0
 //=======================================================================================================================
 async function processPlaces() {
   // const restaurants = document.querySelectorAll('[aria-label="Add note"]');
-  const restaurants = document.querySelectorAll('[aria-label="Añadir nota"]');
-  console.log('Lugares encontrados:', restaurants.length);
+  const places = document.querySelectorAll('[aria-label="Añadir nota"]');  //obtenemos array de sitios
+  console.log('Lugares encontrados:', places.length);
 
-  for (const restaurant of restaurants) {
-    const isBroken = Array.from(restaurant.parentElement.parentElement.previousSibling.querySelectorAll('img'))
+  // parentElement= <div class="j3fM2b ">
+  // parentElement.parentElement= <div class="R6tTO" aria-hidden="false">
+  // Sibling= hermano. PreviousSibling= Hermano mayor. De los que están a su mismo nivel (hermanos) devuelve el anterior.
+  // parentElement.parentElement.previousSibling= <button class="SMP2wb fHEb6e"
+  // TEST= console.log( document.querySelectorAll('[aria-label="Añadir nota"]').parentElement.parentElement.previousSibling.querySelectorAll('img') )
+  for (const place of places) {
+    const isBroken = Array.from(place.parentElement.parentElement.previousSibling.querySelectorAll('img')) // busca imágenes dentro del elemento <button>
     .some(img => img.src === 'https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png');
 
     if (isBroken) {
-      continue;
+      continue; // si está roto no hacemos nada, lo obviamos y continuamos
     } else {
-      await processOnePlace(restaurant);
+      await processOnePlace(place);
       break;
-    }
-  }
+    }// else
+  }// for
 
   processPlaces();
 }
